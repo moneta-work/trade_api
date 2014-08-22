@@ -1,5 +1,5 @@
 <?php
-class Redis {
+class RedisCache {
   private static $obj;
 
   static function &instance($db=1) {
