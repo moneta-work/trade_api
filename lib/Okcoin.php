@@ -20,7 +20,7 @@ class Okcoin {
 
     public static function marketDepth($N=5){
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://www.okcoin.com/api/depth.do");
+        curl_setopt($ch, CURLOPT_URL, "https://www.okcoin.cn/api/depth.do");
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -49,21 +49,21 @@ class Okcoin {
             "symbol" => 'btc_cny',
             "type" => strtolower($type)
         );
-        $url = 'https://www.okcoin.com/api/trade.do';
+        $url = 'https://www.okcoin.cn/api/trade.do';
         $res = self::okQuery($params, $url);
         return $res;
     }       
 
     public static function cancelOrder($id){
         $params = array("order_id"=>$id, "partner"=>KEY_OKCOIN, "symbol"=>"btc_cny");
-        $url = 'https://www.okcoin.com/api/cancelorder.do';
+        $url = 'https://www.okcoin.cn/api/cancelorder.do';
         $res = self::okQuery($params, $url);
         return $res;
     }
 
     public static function getUserInfo(){
         $params = array("partner"=>KEY_OKCOIN);
-        $url = 'https://www.okcoin.com/api/userinfo.do';
+        $url = 'https://www.okcoin.cn/api/userinfo.do';
         $res = self::okQuery($params, $url);
 
         if($res["result"]){
@@ -80,7 +80,7 @@ class Okcoin {
 
     public static function getOrder($id){
         $params = array("order_id"=>$id,"partner"=>KEY_OKCOIN,"symbol"=>"btc_cny");
-        $url = 'https://www.okcoin.com/api/getorder.do';
+        $url = 'https://www.okcoin.cn/api/getorder.do';
         $res = self::okQuery($params, $url);
         return $res;
     }
