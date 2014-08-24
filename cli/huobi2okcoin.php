@@ -7,26 +7,29 @@ require __DIR__."/../lib/Common.php";
 require __DIR__."/../lib/Redis.php";
 require __DIR__."/../lib/Huobi.php";
 require __DIR__."/../lib/Okcoin.php";
-//while(true){
- //   sleep(1);
+while(true){
+    sleep(1);
     try{
         //判断账号余额
         $account_huobi = Huobi::getAccountInfo();
         if($account_huobi['available_btc_display'] < PER_NUMBER){
-            //continue;
-            exit('huobi.btc empty');
+            error_log('btc empty '.date('Y-m-d H:i')."\n", 3, '/tmp/huobi_btc_empty.log');
+            continue;
+            //exit('huobi.btc empty');
         }
         $account_okcoin = Okcoin::getUserInfo();
         //获取当前价格
         $result = priceDiff('huobi2okcoin');
         if($account_okcoin['free']['cny'] <= (PER_NUMBER * $result['sell'] + 1)){
-            //continue;
-            exit('ok.cny empty');
+            error_log('cny empty '.date('Y-m-d H:i')."\n", 3, '/tmp/okcoin_cny_empty.log');
+            continue;
+            //exit('ok.cny empty');
         }
         //火币买一减OK卖一　小于额度则忽略
         if($result['buy'] - $result['sell'] < PRICE_DIFF){
-            //continue;
-            exit('price not diff');
+            error_log('price not diff '.date('Y-m-d H:i')."\n", 3, '/tmp/price_not_diff.log');
+            continue;
+            //exit('price not diff');
         }
         //设置挂单 ok.buy1, huobi.sell1
         $buy1 = round($result['sell']*(1 + TRUST_PERCENT_BUY), 2);
@@ -37,14 +40,14 @@ require __DIR__."/../lib/Okcoin.php";
         if($huobi['result'] != 'success'){
             //卖单失败log
             RedisCache::instance()->hset('huobi_sell_fail', $time, 1);
-            //continue;
-            exit('huobi_sell_fail');
+            continue;
+            //exit('huobi_sell_fail');
         }
         $okcoin = Okcoin::trade($buy1, PER_NUMBER, 'buy');
         if($okcoin['result'] != true){
             RedisCache::instance()->hset('okcoin_buy_fail', $time, 1);
-            //continue;
-            exit('okcoin_buy_fail');
+            continue;
+            //exit('okcoin_buy_fail');
         }
         //成功后记录trust_id
         RedisCache::instance()->hset('huobi_sell', $huobi['id'], $time);
@@ -52,4 +55,4 @@ require __DIR__."/../lib/Okcoin.php";
     } catch (Exception $e) {
         error_log('huobi2okcoin fail'.date('Y-m-d H:i:s')."\n", 3, __DIR__.'/../log/price_diff.log');
     }
-//}
+}
