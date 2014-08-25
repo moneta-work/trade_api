@@ -13,7 +13,7 @@ while(true){
         //判断账号余额
         $account_okcoin = Okcoin::getUserInfo();
         if($account_okcoin['free']['btc'] < PER_NUMBER){
-            error_log('btc empty '.date('Y-m-d H:i')."\n", 3, '/tmp/ok_btc_empty.log');
+            error_log('btc empty '.date('Y-m-d H:i:s')."\n", 3, '/tmp/ok_btc_empty.log');
             continue;
             //exit('okcoin.btc empty');
         }
@@ -21,13 +21,13 @@ while(true){
         $result = priceDiff('okcoin2huobi');
         $account_huobi = Huobi::getAccountInfo();
         if($account_huobi['available_cny_display'] <= ($result['sell'] * PER_NUMBER + 1)){
-            error_log('cny empty '.date('Y-m-d H:i')."\n", 3, '/tmp/huobi_cny_empty.log');
+            error_log('cny empty '.date('Y-m-d H:i:s')."\n", 3, '/tmp/huobi_cny_empty.log');
             continue;
             //exit('huobi.cny empty');
         }
         //OK买一减火币卖一　小于额度则忽略
         if($result['buy'] - $result['sell'] < PRICE_DIFF){
-            error_log('price not diff '.date('Y-m-d H:i')."\n", 3, '/tmp/price_not_diff.log');
+            error_log('price not diff '.date('Y-m-d H:i:s')."\n", 3, '/tmp/price_not_diff.log');
             continue;
             //exit('price not diff');
         }

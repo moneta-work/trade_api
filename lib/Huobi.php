@@ -55,7 +55,6 @@ class Huobi{
         $params = array();
         $params['method'] = 'buy';
         $params['access_key'] = KEY_HUOBI;
-        $params['coin_type'] = 1;
         $params['price'] = $price;
         $params['amount'] = $amount;
         $params['created'] = time();
@@ -70,7 +69,6 @@ class Huobi{
         $params = array();
         $params['method'] = 'sell';
         $params['access_key'] = KEY_HUOBI;
-        $params['coin_type'] = 1;
         $params['price'] = $price;
         $params['amount'] = $amount;
         $params['created'] = time();

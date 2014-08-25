@@ -11,7 +11,7 @@ require 'config.php';
 //huobi
 //print_r(Huobi::getAccountInfo());
 //okcoin
-print_r(Okcoin::getUserInfo());
+//print_r(Okcoin::getUserInfo());
 //bter
 //print_r(Bter::getFunds());
 //btcc
