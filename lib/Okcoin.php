@@ -3,7 +3,7 @@ class Okcoin {
 
     protected static function okQuery($params, $url){
         $post_data = http_build_query($params, '', '&');
-        $sign = md5 ($post_data.KEY_OKCOIN);
+        $sign = md5 ($post_data.SECRET_OKCOIN);
         $sign = strtoupper($sign);
 
         $query = "partner=".KEY_OKCOIN."&sign=".$sign."&".$post_data;

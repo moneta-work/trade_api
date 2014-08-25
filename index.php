@@ -5,16 +5,13 @@ function autoload($class){
 spl_autoload_register('autoload');
 require 'config.php';
 
-$huobi = Market::huobiTicker('btc');
+//$huobi = Market::huobiTicker('btc');
 //$okcoin = Market::okcoinTicker();
-$btcc = Market::btccTicker('btccny');
-print_r($huobi);
-//print_r($okcoin);
-print_r($btcc);
+//$btcc = Market::btccTicker('btccny');
 //huobi
 //print_r(Huobi::getAccountInfo());
 //okcoin
-//print_r(Okcoin::fund());
+print_r(Okcoin::getUserInfo());
 //bter
 //print_r(Bter::getFunds());
 //btcc

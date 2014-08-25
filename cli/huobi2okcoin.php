@@ -20,7 +20,7 @@ while(true){
         $account_okcoin = Okcoin::getUserInfo();
         //获取当前价格
         $result = priceDiff('huobi2okcoin');
-        if($account_okcoin['free']['cny'] <= (PER_NUMBER * $result['sell'] + 1)){
+        if(!$account_okcoin['result'] || $account_okcoin['free']['cny'] <= (PER_NUMBER * $result['sell'] + 1)){
             error_log('cny empty '.date('Y-m-d H:i')."\n", 3, '/tmp/okcoin_cny_empty.log');
             continue;
             //exit('ok.cny empty');
