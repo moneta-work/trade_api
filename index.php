@@ -4,6 +4,7 @@ function autoload($class){
 }
 spl_autoload_register('autoload');
 require 'config.php';
+require 'PHPmailer.php';
 
 //$huobi = Market::huobiTicker('btc');
 //$okcoin = Market::okcoinTicker();

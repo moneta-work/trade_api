@@ -3,10 +3,6 @@
  * ok卖,火币买,即检测ok买一与火币卖一
  */
 require __DIR__."/../config.php";
-require __DIR__."/../lib/Common.php";
-require __DIR__."/../lib/Redis.php";
-require __DIR__."/../lib/Huobi.php";
-require __DIR__."/../lib/Okcoin.php";
 while(true){
     sleep(1);
     try{
