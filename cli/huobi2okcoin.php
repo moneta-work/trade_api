@@ -1,7 +1,7 @@
 <?php
 /**
  * 火币卖,OK买,即检测火币买一与OK卖一
- * price_diff=0, 检测火币 币多钱少，ok 钱多币少
+ * price_diff=1, 检测火币 币多钱少，ok 钱多币少
  */
 require __DIR__."/../config.php";
 while(true){
@@ -10,7 +10,7 @@ while(true){
         //判断账号余额
         $account_huobi = Huobi::getAccountInfo();
         //是否满足最低btc额度
-        if($price_diff == 0 && $account_huobi['available_btc_display'] > HUOBI_BTC){
+        if($price_diff == 1 && $account_huobi['available_btc_display'] > HUOBI_BTC){
             continue;
         }
         //是否大于挂一笔单的btc
@@ -21,7 +21,7 @@ while(true){
         }
         $account_okcoin = Okcoin::getUserInfo();
         //是否满足最低btc额度
-        if($price_diff == 0 && $account_okcoin['free']['btc'] < OKCOIN_BTC){
+        if($price_diff == 1 && $account_okcoin['free']['btc'] < OKCOIN_BTC){
             continue;
         }
         //获取当前价格
