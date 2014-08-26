@@ -14,7 +14,7 @@ while(true){
             //exit('okcoin.btc empty');
         }
         //获取当前价格
-        $result = priceDiff('okcoin2huobi');
+        $result = Common::priceDiff('okcoin2huobi');
         $account_huobi = Huobi::getAccountInfo();
         if($account_huobi['available_cny_display'] <= ($result['sell'] * PER_NUMBER + 1)){
             error_log('cny empty '.date('Y-m-d H:i:s')."\n", 3, '/tmp/huobi_cny_empty.log');

@@ -1,11 +1,9 @@
 <?php
-function autoload($class){
-    include __DIR__."/lib/".$class.".php";
-}
-spl_autoload_register('autoload');
 require 'config.php';
-require 'PHPmailer.php';
 
+//$huobi = Huobi::buy(3011, 0.02);
+$huobi = Huobi::sell(3311, 0.02);
+var_dump($huobi);
 //$huobi = Market::huobiTicker('btc');
 //$okcoin = Market::okcoinTicker();
 //$btcc = Market::btccTicker('btccny');

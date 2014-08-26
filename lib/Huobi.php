@@ -1,8 +1,8 @@
 <?php
 class Huobi{
-    const API_URL = 'https://api.huobi.com/api.php';
+    const API_URL = 'https://api.huobi.com/apiv2.php';
 
-    public static function httpRequest($param, $pUrl='https://api.huobi.com/api.php'){
+    public static function httpRequest($param, $pUrl='https://api.huobi.com/apiv2.php'){
         $ch = curl_init();
         if($param){
             is_array($param) && $param = http_build_query($param);
@@ -55,6 +55,7 @@ class Huobi{
         $params = array();
         $params['method'] = 'buy';
         $params['access_key'] = KEY_HUOBI;
+        $params['coin_type'] = 1;
         $params['price'] = $price;
         $params['amount'] = $amount;
         $params['created'] = time();
@@ -69,6 +70,7 @@ class Huobi{
         $params = array();
         $params['method'] = 'sell';
         $params['access_key'] = KEY_HUOBI;
+        $params['coin_type'] = 1;
         $params['price'] = $price;
         $params['amount'] = $amount;
         $params['created'] = time();
