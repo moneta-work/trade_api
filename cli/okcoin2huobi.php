@@ -8,7 +8,7 @@ while(true){
     try{
         //判断账号余额
         $account_okcoin = Okcoin::getUserInfo();
-        if($account_okcoin['free']['btc'] < PER_NUMBER){
+        if($account_okcoin['free']['btc'] < $per_number){
             error_log('btc empty '.date('Y-m-d H:i:s')."\n", 3, '/tmp/ok_btc_empty.log');
             continue;
             //exit('okcoin.btc empty');
@@ -16,13 +16,13 @@ while(true){
         //获取当前价格
         $result = Common::priceDiff('okcoin2huobi');
         $account_huobi = Huobi::getAccountInfo();
-        if($account_huobi['available_cny_display'] <= ($result['sell'] * PER_NUMBER + 1)){
+        if($account_huobi['available_cny_display'] <= ($result['sell'] * $per_number + 1)){
             error_log('cny empty '.date('Y-m-d H:i:s')."\n", 3, '/tmp/huobi_cny_empty.log');
             continue;
             //exit('huobi.cny empty');
         }
         //OK买一减火币卖一　小于额度则忽略
-        if($result['buy'] - $result['sell'] < PRICE_DIFF){
+        if($result['buy'] - $result['sell'] < $price_diff){
             error_log('price not diff '.date('Y-m-d H:i:s')."\n", 3, '/tmp/price_not_diff.log');
             continue;
             //exit('price not diff');
@@ -32,13 +32,13 @@ while(true){
         $sell1 = round($result['buy']*(1 - TRUST_PERCENT_SALE), 2);
         $time = time();
         //挂单 卖优先
-        $okcoin = Okcoin::trade($sell1, PER_NUMBER, 'sell');
+        $okcoin = Okcoin::trade($sell1, $per_number, 'sell');
         if($okcoin['result'] != true){
             RedisCache::instance()->hset('okcoin_sell_fail', $time, 1);
             continue;
             //exit('okcoin_sell_fail');
         }
-        $huobi = Huobi::buy($buy1, PER_NUMBER);
+        $huobi = Huobi::buy($buy1, $per_number);
         if($huobi['result'] != 'success'){
             //卖单失败log
             RedisCache::instance()->hset('huobi_buy_fail', $time, 1);
