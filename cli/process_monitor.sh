@@ -1,10 +1,10 @@
 #!/bin/bash
 #cli_*重启&监控脚本
 #日志文件
-file_name="/var/log/cli/php_coinin.log"
+file_name="/var/log/cli/php_tradeapi.log"
 proc_date=`date "+%Y%m%d"`
 #check
-proc_name=("freeybcin.php" "ybyin.php")
+proc_name=("huobi2okcoin.php" "okcoin2huobi.php")
 
 case "$1" in
     check)
