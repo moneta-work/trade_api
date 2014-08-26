@@ -1,6 +1,7 @@
 <?php
 /**
  * ok卖,火币买,即检测ok买一与火币卖一
+ * 
  */
 require __DIR__."/../config.php";
 while(true){
@@ -8,14 +9,22 @@ while(true){
     try{
         //判断账号余额
         $account_okcoin = Okcoin::getUserInfo();
+        //是否满足最低btc额度
+        if($price_diff == 0 && $account_okcoin['free']['btc'] > OKCOIN_BTC){
+            continue;
+        }
         if($account_okcoin['free']['btc'] < $per_number){
             error_log('btc empty '.date('Y-m-d H:i:s')."\n", 3, '/tmp/ok_btc_empty.log');
             continue;
             //exit('okcoin.btc empty');
         }
+        $account_huobi = Huobi::getAccountInfo();
+        //是否满足最低btc额度
+        if($price_diff == 0 && $account_huobi['available_btc_display'] < HUOBI_BTC){
+            continue;
+        }
         //获取当前价格
         $result = Common::priceDiff('okcoin2huobi');
-        $account_huobi = Huobi::getAccountInfo();
         if($account_huobi['available_cny_display'] <= ($result['sell'] * $per_number + 1)){
             error_log('cny empty '.date('Y-m-d H:i:s')."\n", 3, '/tmp/huobi_cny_empty.log');
             continue;
