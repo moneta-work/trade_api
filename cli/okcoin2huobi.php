@@ -20,7 +20,7 @@ while(true){
         }
         $account_huobi = Huobi::getAccountInfo();
         //是否满足最低btc额度
-        if($price_diff < 1 && $account_huobi['available_btc_display'] < HUOBI_BTC){
+        if(!isset($account_huobi['available_btc_display']) || ($price_diff < 1 && $account_huobi['available_btc_display'] < HUOBI_BTC)){
             continue;
         }
         //获取当前价格
