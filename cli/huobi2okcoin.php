@@ -10,7 +10,7 @@ while(true){
         //判断账号余额
         $account_huobi = Huobi::getAccountInfo();
         //是否满足最低btc额度
-        if($price_diff == 1 && $account_huobi['available_btc_display'] > HUOBI_BTC){
+        if($price_diff < 1 && $account_huobi['available_btc_display'] > HUOBI_BTC){
             continue;
         }
         //是否大于挂一笔单的btc
@@ -21,7 +21,7 @@ while(true){
         }
         $account_okcoin = Okcoin::getUserInfo();
         //是否满足最低btc额度
-        if($price_diff == 1 && $account_okcoin['free']['btc'] < OKCOIN_BTC){
+        if($price_diff < 1 && $account_okcoin['free']['btc'] < OKCOIN_BTC){
             continue;
         }
         //获取当前价格
