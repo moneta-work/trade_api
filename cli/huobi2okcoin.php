@@ -40,6 +40,10 @@ while(true){
         //设置挂单 ok.buy1, huobi.sell1
         $buy1 = round($result['sell']*(1 + TRUST_PERCENT_BUY), 2);
         $sell1 = round($result['buy']*(1 - TRUST_PERCENT_SALE), 2);
+        //网络bug 价格可能为0
+        if($buy1 < 10 || $sell1 < 10){
+            continue;
+        }
         $time = time();
         //挂单 卖优先
         $huobi = Huobi::sell($sell1, $per_number);
@@ -51,9 +55,10 @@ while(true){
         }
         $okcoin = Okcoin::trade($buy1, $per_number, 'buy');
         if($okcoin['result'] != true){
+            error_log(print_r($okcoin,true)." {$buy1} {$per_number}", 3, '/tmp/okcoin_buy_fail.log');
             RedisCache::instance()->hset('okcoin_buy_fail', $time, 1);
-            continue;
-            //exit('okcoin_buy_fail');
+            //continue;
+            exit('okcoin_buy_fail');
         }
         //成功后记录trust_id
         RedisCache::instance()->hset('huobi_sell', $huobi['id'], $time);
