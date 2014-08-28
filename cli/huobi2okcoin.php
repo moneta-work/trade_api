@@ -41,7 +41,7 @@ while(true){
         $buy1 = round($result['sell']*(1 + TRUST_PERCENT_BUY), 2);
         $sell1 = round($result['buy']*(1 - TRUST_PERCENT_SALE), 2);
         //网络bug 价格可能为0
-        if($buy1 < 10 || $sell1 < 10){
+        if($buy1 < 10 || $sell1 < 10 || $sell1-$buy1+1 < $price_diff){
             continue;
         }
         $time = time();
