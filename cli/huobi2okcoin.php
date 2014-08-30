@@ -7,26 +7,17 @@ require __DIR__."/../config.php";
 while(true){
     sleep(1);
     try{
-        //判断账号余额
-        $account_huobi = Huobi::getAccountInfo();
-        //是否满足最低btc额度
-        if(!isset($account_huobi['available_btc_display']) || ($price_diff < 1 && $account_huobi['available_btc_display'] < HUOBI_BTC)){
-            continue;
-        }
         //是否大于挂一笔单的btc
-        if($account_huobi['available_btc_display'] < $per_number){
+        $account_huobi = Huobi::getAccountInfo();
+        if(!isset($account_huobi['available_btc_display']) || $account_huobi['available_btc_display'] < $per_number){
             error_log('btc empty '.date('Y-m-d H:i')."\n", 3, '/tmp/huobi_btc_empty.log');
             continue;
             //exit('huobi.btc empty');
         }
         $account_okcoin = Okcoin::getUserInfo();
-        //是否满足最低btc额度
-        if($price_diff < 1 && $account_okcoin['free']['btc'] > OKCOIN_BTC){
-            continue;
-        }
         //获取当前价格
         $result = Common::priceDiff('huobi2okcoin');
-        if(!$account_okcoin['result'] || $account_okcoin['free']['cny'] <= ($per_number * $result['sell'] + 1)){
+        if(!$account_okcoin['result'] || $account_okcoin['free']['cny'] < ($per_number * $result['sell'] + 1)){
             error_log('cny empty '.date('Y-m-d H:i')."\n", 3, '/tmp/okcoin_cny_empty.log');
             continue;
             //exit('ok.cny empty');
@@ -40,8 +31,9 @@ while(true){
         //设置挂单 ok.buy1, huobi.sell1
         $buy1 = round($result['sell']*(1 + TRUST_PERCENT_BUY), 2);
         $sell1 = round($result['buy']*(1 - TRUST_PERCENT_SALE), 2);
+        $price_diff_real = $sell1 - $buy1;
         //网络bug 价格可能为0
-        if($buy1 < 10 || $sell1 < 10 || $sell1-$buy1+1 < $price_diff){
+        if($buy1 < 10 || $sell1 < 10 || $price_diff_real+1 < $price_diff){
             continue;
         }
         $time = time();
@@ -60,9 +52,12 @@ while(true){
             //continue;
             exit('okcoin_buy_fail');
         }
+        //成功后更新差价计数
+        $price_diff_real = floor($price_diff_real);
+        RedisCache::instance(7)->zIncrBy('huobi2okcoin', 1, $price_diff_real);
         //成功后记录trust_id
-        RedisCache::instance()->hset('huobi_sell', $huobi['id'], $time);
-        RedisCache::instance()->hset('okcoin_buy', $okcoin['order_id'], $time);
+        //RedisCache::instance()->hset('huobi_sell', $huobi['id'], $time);
+        //RedisCache::instance()->hset('okcoin_buy', $okcoin['order_id'], $time);
     } catch (Exception $e) {
         error_log('huobi2okcoin fail'.date('Y-m-d H:i:s')."\n", 3, __DIR__.'/../log/price_diff.log');
     }
