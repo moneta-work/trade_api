@@ -19,7 +19,7 @@ while(true){
         if(!isset($account_huobi['available_btc_display'])){
             continue;
         }
-        //获取当前价格
+        //获取当前价格 ok.buy huobi.sell
         $result = Common::priceDiff('okcoin2huobi');
         if($account_huobi['available_cny_display'] < ($result['sell'] * $per_number + 1)){
             error_log('cny empty '.date('Y-m-d H:i:s')."\n", 3, '/tmp/huobi_cny_empty.log');

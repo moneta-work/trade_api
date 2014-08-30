@@ -1,8 +1,8 @@
 <?php
 class Common{
     /**
-     * 卖一买一数据对比,huobi,okcoin,btcc
-     * sell2buy
+     * 买一卖一数据对比,huobi,okcoin,btcc
+     * buy2sell
      * huobi2okcoin, return huobi.buy,okcoin,sell
      *
      */
